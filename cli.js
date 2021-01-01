@@ -1,25 +1,78 @@
 #!/bin/env node
 const request = require('request');
-const https = require('https');
 const fs = require('fs');
-const { on } = require('process');
+const path = require('path');
+const { exec } = require("child_process");
 
 const url = "https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY";
+const gsettings = 'gsettings set org.gnome.desktop.background picture-uri';
+const fileName = "wallpaper.jpg";
 
-request(url, (error, res, body) => {
-	if (error) {
-		console.error('Error while fetching data', err);
-		process.exit(1);
-	}
+const [,, ...args] = process.argv;
 
-	if (res.statusCode === 200) {
+const main = () => {
+	request(url, async (err, res, body) => {
+		if (err) {
+			handleError('Error while fetching data', err);
+		}
+	
+		if (res.statusCode === 200) {
+			await downloadWallpaper(body);
+			setImageAsWAllpaper();
+		} else {
+			handleError(`Error, Response send with status code ${res.statusCode}`);
+		}
+	})
+}
+
+
+const setImageAsWAllpaper = () => {
+	exec(getCmd(), (error, stdout, stderr) => {
+		if (error) {
+			handleError('Error while setting wallpaper as wallpaper', err);
+			return;
+		}
+
+		const std = stdout || stderr;
+		console.log(std);
+	});
+}
+
+const downloadWallpaper = async (body) => {
+	try {
 		const imageUrl = JSON.parse(body).url;
-		const file = fs.createWriteStream("./images/wallpaper.jpg");
-		https.get(imageUrl, function(response) {
-			response.pipe(file);
-		});
-	} else {
-		console.error(`Error, Response send with status code ${res.statusCode}`);
-		process.exit(1);
+		const file = fs.createWriteStream(getFullPath());
+		request.get(imageUrl).pipe(file);
+	} catch (err) {
+		handleError('Error while downloading the wallpaper', err);
 	}
-})
+}
+
+const getCmd = () => {
+	const fullPath = getFullPath();
+	return `${gsettings} file://${fullPath}`;
+}
+
+getFullPath = () => {
+	let filePath = args[0];
+	if (args[0].substr(args[0].length - 1) !== "/") {
+		filePath += "/";
+	}
+
+	return filePath+fileName;
+}
+
+
+const handleError = (message, err) => {
+	console.error(message);
+	if (err) {
+		console.log(err)
+	}
+	process.exit(1);
+}
+
+if (args.length !== 1 || !path.isAbsolute(args[0]) || !fs.lstatSync(args[0]).isDirectory()) {
+	handleError('Should be one argument, an absolute filepath to a directory which store the wallpaper e.g script /absolute/file/path');
+} else {
+	main();
+}
