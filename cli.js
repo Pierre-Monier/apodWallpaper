@@ -69,7 +69,7 @@ const getCmd = () => {
 	return `${gsettings} file://${fullPath}`;
 }
 
-getFullPath = () => {
+const getFullPath = () => {
 	let filePath = args[0];
 	if (args[0].substr(args[0].length - 1) !== "/") {
 		filePath += "/";
