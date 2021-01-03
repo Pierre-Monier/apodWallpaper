@@ -25,7 +25,6 @@ const main = () => {
 	})
 }
 
-
 const setImageAsWAllpaper = () => {
 	exec(getCmd(), (error, stdout, stderr) => {
 		if (error) {
@@ -48,6 +47,23 @@ const downloadWallpaper = async (body) => {
 	}
 }
 
+const waitForInternetConnection = async (cb) => {
+	console.log("checking internet connexion");
+	try {
+		child = exec('ping -c 1 8.8.8.8', function(err, stdout, stderr){
+			if (err) {
+			    console.log("Not available")
+				waitForInternetConnection();
+			} else {
+			    console.log("Available")
+			    cb();
+			}
+		});
+	} catch (err) {
+		handleError('Error while checking internet connection', err);
+	}
+}
+
 const getCmd = () => {
 	const fullPath = getFullPath();
 	return `${gsettings} file://${fullPath}`;
@@ -62,7 +78,6 @@ getFullPath = () => {
 	return filePath+fileName;
 }
 
-
 const handleError = (message, err) => {
 	console.error(message);
 	if (err) {
@@ -74,5 +89,10 @@ const handleError = (message, err) => {
 if (args.length !== 1 || !path.isAbsolute(args[0]) || !fs.lstatSync(args[0]).isDirectory()) {
 	handleError('Should be one argument, an absolute filepath to a directory which store the wallpaper e.g script /absolute/file/path');
 } else {
-	main();
+	waitForInternetConnection(main);
 }
+
+// TODO handle multiple desktop environment
+// TODO put wallpaper with setting (center, scretch...);
+// TODO make it work in cron
+// TODO improve internet detection 
