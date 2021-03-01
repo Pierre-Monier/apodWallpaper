@@ -1,15 +1,19 @@
 const fs = require('fs');
 const path = require('path');
-const fileName = "wallpaper.jpg";
 const { exec } = require("child_process");
 
-const getFullPath = (argPath) => {
-	let filePath = argPath;
-	if (argPath.substr(argPath.length - 1) !== "/") {
+const imageFileName = "wallpaper.jpg";
+const explanationFileName = ".explanation.json";
+const gsettings = 'gsettings set org.gnome.desktop.background picture-uri';
+
+const getFilePath = (isImage = true) => {
+	const fileName = isImage ? imageFileName : explanationFileName;
+	let filePath = process.env.APOD_WALLPAPER;
+	if (filePath.substr(filePath.length - 1) !== "/") {
 		filePath += "/";
 	}
 
-	return filePath+fileName;
+	return filePath + fileName;
 }
 
 const handleError = (message, err) => {
@@ -37,13 +41,36 @@ const waitForInternetConnection = async (cb) => {
 	}
 }
 
-const areArgsValid = (args) => {
-    return (args.length !== 1 || !path.isAbsolute(args[0]) || !fs.lstatSync(args[0]).isDirectory());
+const isSettingAsWallaper = (args) => {
+    return (args.length === 1 && args[0] === "set" && path.isAbsolute(process.env.APOD_WALLPAPER) && fs.lstatSync(process.env.APOD_WALLPAPER).isDirectory());
 }
 
-module.exports = { 
-	getFullPath: getFullPath,
+const isAskingExplaination = (args) => {
+	return (args.length === 1 && args[0] === "explain");
+}
+
+const getExplanationCachedFile = async () => {
+	try {
+		const explanation = require(getFilePath(false));
+		const currentDate = new Date().toISOString().split('T')[0];
+
+		return (explanation.date !== currentDate) ? false : explanation;
+	} catch {
+		return false;
+	}
+}
+
+const getCmd = () => {
+	const fullPath = getFilePath();
+	return `${gsettings} file://${fullPath}`;
+}
+
+module.exports = {
+	getFilePath: getFilePath,
 	handleError: handleError,
 	waitForInternetConnection: waitForInternetConnection,
-	areArgsValid: areArgsValid
+	isSettingAsWallaper: isSettingAsWallaper,
+	isAskingExplaination: isAskingExplaination,
+	getExplanationCachedFile: getExplanationCachedFile,
+	getCmd: getCmd
 }
