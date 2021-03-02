@@ -16,7 +16,7 @@ const setApodAsWallpaper = () => {
 		if (res.statusCode === 200) {
 			await downloadWallpaper(body)
 			cacheExplanationFile(body);
-			setImageAsWAllpaper();
+			setImageAsWAllpaper(args)
 		} else {
 			handleError(`Error, Response send with status code ${res.statusCode}`);
 		}
@@ -67,11 +67,11 @@ switch (true) {
 		console.log("Use 'explain' to get explanation about the APOD of the day");
 		console.log("You need an env variable named APOD_WALLPAPER which is an absolute filepath to a directory which store the wallpaper");
 		console.log('e.g APOD_WALLPAPER="/absolute/file/path" apod-wallpaper set | explain')
+		console.log('You can specify option for the background, --both will set for screensaver and background, there is a lot other option, --zoom, --centered, --scaled ...(it match the gsettings option) ')
 		break;
 }
 
-// TODO put wallpaper with setting (center, scretch...);
-// TODO make it work in cron
-// TODO improve internet detection
+// TODO make it work in cron (very hard)
+// TODO improve internet detection (maybe remove it ?)
 
 // TODO handle multiple desktop environment (gsettings for gnome, ...)

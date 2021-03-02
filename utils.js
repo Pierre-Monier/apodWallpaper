@@ -4,7 +4,6 @@ const { exec } = require("child_process");
 
 const imageFileName = "wallpaper.jpg";
 const explanationFileName = ".explanation.json";
-const gsettings = 'gsettings set org.gnome.desktop.background picture-uri';
 
 const getFilePath = (isImage = true) => {
 	const fileName = isImage ? imageFileName : explanationFileName;
@@ -25,7 +24,7 @@ const handleError = (message, err) => {
 }
 
 const waitForInternetConnection = async (cb) => {
-	console.log("checking internet connexion");
+	console.log("checking internet connexion", console.log(typeof(cb)));
 	try {
 		exec('ping -c 1 8.8.8.8', function(err, stdout, stderr){
 			if (err) {
@@ -42,7 +41,7 @@ const waitForInternetConnection = async (cb) => {
 }
 
 const isSettingAsWallaper = (args) => {
-    return (args.length === 1 && args[0] === "set" && path.isAbsolute(process.env.APOD_WALLPAPER) && fs.lstatSync(process.env.APOD_WALLPAPER).isDirectory());
+    return (args.length >= 1 && args.length <= 3 && args[0] === "set" && path.isAbsolute(process.env.APOD_WALLPAPER) && fs.lstatSync(process.env.APOD_WALLPAPER).isDirectory());
 }
 
 const isAskingExplaination = (args) => {
@@ -60,17 +59,11 @@ const getExplanationCachedFile = async () => {
 	}
 }
 
-const getCmd = () => {
-	const fullPath = getFilePath();
-	return `${gsettings} file://${fullPath}`;
-}
-
 module.exports = {
 	getFilePath: getFilePath,
 	handleError: handleError,
 	waitForInternetConnection: waitForInternetConnection,
 	isSettingAsWallaper: isSettingAsWallaper,
 	isAskingExplaination: isAskingExplaination,
-	getExplanationCachedFile: getExplanationCachedFile,
-	getCmd: getCmd
+	getExplanationCachedFile: getExplanationCachedFile
 }
