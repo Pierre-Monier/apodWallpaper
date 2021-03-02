@@ -1,6 +1,6 @@
 {
   "name": "apodwallpaper",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Change the wallpaper on *nix system with the current apod website picture ",
   "main": "cli.js",
   "scripts": {
