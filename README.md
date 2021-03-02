@@ -1,6 +1,9 @@
+This package purpose is to allow you to set the actual APOD image as your wallpaper. This package only works on linux system with a gnome base desktop environment.
+You can make pull request to make it works on other desktop system (cinnamon, kde...)
+
 Install it with
 
-`sudo npm install -g apod-wallpaper`
+`sudo npm install -g apodwallpaper`
 
 You need to define an env variable named *APOD_WALLPAPER*, this variable must be an absolute to a directory (the one you want to store to wallpaper image)
 
