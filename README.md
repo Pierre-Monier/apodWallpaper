@@ -5,7 +5,7 @@ Install it with
 
 `sudo npm install -g apodwallpaper`
 
-You need to define an env variable named *APOD_WALLPAPER*, this variable must be an absolute to a directory (the one you want to store to wallpaper image)
+You need to define an env variable named *APOD_WALLPAPER*, this variable must be an absolute path to a directory (the one you want to store to wallpaper image)
 
 You run the script like this
 
