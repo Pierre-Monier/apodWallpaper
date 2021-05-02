@@ -18,3 +18,5 @@ You can also get the explanation about the APOD
 `APOD_WALLPAPER="absolute/path" apod-wallpaper explain`
 
 This will print the explanation
+
+This project use CommonJs module for a better NodeJs compatibility
