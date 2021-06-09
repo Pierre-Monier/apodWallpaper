@@ -1,5 +1,4 @@
-This package purpose is to allow you to set the actual APOD image as your wallpaper. This package only works on linux system with a gnome base desktop environment.
-You can make pull request to make it works on other desktop system (cinnamon, kde...)
+This package purpose is to allow you to set the actual APOD image as your wallpaper. It works on every desktop system (Linux, MacOs and Windows)
 
 Install it with
 
@@ -9,9 +8,9 @@ You need to define an env variable named *APOD_WALLPAPER*, this variable must be
 
 You run the script like this
 
-`APOD_WALLPAPER="absolute/path" apod-wallpaper set --both --zoom`
+`APOD_WALLPAPER="absolute/path" apod-wallpaper set`
 
-the *set* argument set the APOD as your computer wallpaper, *--zoom* is a style option (it's the gnome wallpaper option (centered, scaled, stretched...))
+the *set* argument set the APOD as your computer wallpaper
 
 You can also get the explanation about the APOD 
 
