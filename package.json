@@ -1,7 +1,7 @@
 {
   "name": "apodwallpaper",
-  "version": "1.0.1",
-  "description": "Change the wallpaper on *nix system with the current apod website picture ",
+  "version": "1.0.2",
+  "description": "Change the wallpaper to the current apod website picture",
   "main": "cli.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
