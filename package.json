@@ -1,6 +1,6 @@
 {
   "name": "apodwallpaper",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Change the wallpaper to the current apod website picture",
   "main": "cli.js",
   "scripts": {
